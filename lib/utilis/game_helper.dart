@@ -45,7 +45,7 @@ class MineSweeperGame {
     for(int i = 0; i < row; i++){
       for(int j = 0; j < col; j++){
         if(map[i][j].content == "X") {
-          map[i][j].reaveal = true;
+          map[i][j].reveal = true;
         }
       }
     }

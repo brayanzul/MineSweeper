@@ -11,6 +11,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   MineSweeperGame game = MineSweeperGame();
+  final Dinamita = Image.asset("asets/dinamita.png");
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(
                         Icons.flag,
@@ -85,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(
                         Icons.timer,
@@ -109,14 +110,15 @@ class _MainScreenState extends State<MainScreen> {
           /* Now let's add the Game Grid */
           Container(
             width: double.infinity,
-            height: 500.0,
+            height: 600.0,
             padding: const EdgeInsets.all(20.0),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: MineSweeperGame.row,
                 crossAxisSpacing: 4.0,
                 mainAxisSpacing: 4.0,
-              ), 
+              ),
+              itemCount: MineSweeperGame.cells,
               itemBuilder: (BuildContext ctx, index) {
                 Color cellColor = game.gameMap[index].reveal ? AppColor.clickedCard : AppColor.lightPrimaryColor;
                 return GestureDetector(
@@ -130,11 +132,64 @@ class _MainScreenState extends State<MainScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: cellColor,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          game.gameMap[index].reveal
+                            ? "${game.gameMap[index].content}"
+                            : "",
+                          style: TextStyle(
+                            color: game.gameMap[index].reveal
+                              ? game.gameMap[index].content == "X"
+                                ? Colors.red
+                                : AppColor.letterColors[game.gameMap[index].content]
+                              : Colors.transparent,
+                            fontSize: 24.0
+                          ),
+                        ),
                       ),
                     ),
                 );
               }
             ),
+          ),
+          Text(
+            game.gameOver ? "You Lose" : "",
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 32.0
+            ),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          RawMaterialButton(
+            onPressed: (){
+              setState(() {
+                game.resetGame();
+                game.gameOver = false;
+              });
+            },
+            fillColor: AppColor.lightPrimaryColor,
+            elevation: 0.0,
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 64.0,
+              vertical: 24.0,
+            ),
+            child: const Text(
+              "Repeat",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20.0,
           ),
         ],
       ),
